@@ -1,65 +1,103 @@
-import Image from "next/image";
+"use client"
+
+import { useState, useEffect } from "react"
+
+// Durasi timer dalam detik (25 menit)
+const DURATION = 25 * 60
 
 export default function Home() {
+  // Sisa waktu dalam detik
+  const [timeLeft, setTimeLeft] = useState(DURATION)
+  // Apakah timer sedang berjalan
+  const [isRunning, setIsRunning] = useState(false)
+
+  // Ukuran SVG
+  const size = 300
+  const strokeWidth = 12
+  const radius = (size - strokeWidth) / 2
+
+  // Keliling lingkaran (2πr) — panjang total garis circle
+  const circumference = 2 * Math.PI * radius
+
+  // Progress 0-1: 1 = penuh, 0 = habis
+  const progress = timeLeft / DURATION
+
+  // Seberapa banyak garis yang "disembunyikan" — makin kecil timeLeft, makin banyak yang hilang
+  const strokeDashoffset = circumference * (1 - progress)
+
+  useEffect(() => {
+    // Kalau timer tidak jalan, tidak perlu jalanin interval
+    if (!isRunning) return
+
+    // Jalanin fungsi setiap 1000ms (1 detik)
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        // Kalau tinggal 1 detik atau kurang, stop
+        if (prev <= 1) {
+          clearInterval(interval) // matiin interval
+          setIsRunning(false)     // ubah state jadi berhenti
+          return 0                // pastiin berhenti di 0
+        }
+        return prev - 1 // kurangi 1 detik
+      })
+    }, 1000)
+
+    // Cleanup: matiin interval kalau component unmount atau isRunning berubah
+    return () => clearInterval(interval)
+  }, [isRunning]) // useEffect ini re-run setiap kali isRunning berubah
+
+  // Format detik jadi MM:SS
+  const minutes = Math.floor(timeLeft / 60).toString().padStart(2, "0")
+  const seconds = (timeLeft % 60).toString().padStart(2, "0")
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="w-screen h-screen flex flex-col justify-center items-center gap-6">
+      <svg width={size} height={size}>
+        {/* Lingkaran background (abu-abu) */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="#e5e7eb"
+          strokeWidth={strokeWidth}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+        {/* Lingkaran progress (biru) — berubah seiring waktu */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="#3b82f6"
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference} // total panjang garis
+          strokeDashoffset={strokeDashoffset} // bagian yang disembunyikan
+          strokeLinecap="round"
+          transform={`rotate(-90 ${size / 2} ${size / 2})`} // mulai dari atas, bukan kanan
+        />
+        {/* Teks countdown di tengah */}
+        <text
+          x={size / 2}
+          y={size / 2}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="text-4xl font-bold"
+          fill="currentColor"
+        >
+          {minutes}:{seconds}
+        </text>
+      </svg>
+
+      <div className="flex gap-3">
+        {/* Satu tombol untuk start dan pause */}
+        <button onClick={() => setIsRunning(!isRunning)}>
+          {isRunning ? "Pause" : "Start"}
+        </button>
+        {/* Reset: stop timer dan kembalikan ke durasi awal */}
+        <button onClick={() => { setIsRunning(false); setTimeLeft(DURATION) }}>
+          Reset
+        </button>
+      </div>
+    </main>
+  )
 }
