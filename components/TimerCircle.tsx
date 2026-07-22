@@ -11,7 +11,7 @@ function TimerCircle({progress}: {progress: number}) {
 
    //style circle
   const bgFill = "none"
-  const bgStroke = "#e5e7eb"
+  const bgStroke = "#333333"
   const progressFill = "none"
   const progressStroke = "#FF2D55"
 
