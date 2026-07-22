@@ -1,4 +1,5 @@
 "use client"
+import { COLOR_PROGRESS } from "@/lib/config"
 
 function TimerCircle({progress}: {progress: number}) {
    //dimensi circle
@@ -32,7 +33,7 @@ function TimerCircle({progress}: {progress: number}) {
          cy={size / 2}
          r={radius}
          fill={progressFill}
-         stroke={progressStroke}
+         stroke={COLOR_PROGRESS}
          strokeWidth={strokeWidth}
          strokeDasharray={circumference}
 

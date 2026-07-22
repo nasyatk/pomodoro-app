@@ -1,0 +1,1 @@
+export const COLOR_PROGRESS = "#FF2D55"
