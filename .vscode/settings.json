@@ -1,0 +1,8 @@
+{
+    "files.autoSave": "afterDelay",
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": false,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.codeActions.triggerOnFocusChange": false,
+    "editor.codeActionWidget.showHeaders": true,
+    "inline-bookmarks.view.showVisibleFilesOnly": false
+}

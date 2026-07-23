@@ -7,6 +7,7 @@ import { Time } from "@/components/TimerDisplay";
 import { Button } from "@/components/ui/button";
 import {TimerCircle} from "@/components/TimerCircle";
 
+
 const DURATION = 1 * 60;
 
 export default function Page() {
@@ -17,22 +18,21 @@ export default function Page() {
 
   const progress = timeLeft / DURATION;
 
+  
   useEffect(() => {
     if (!isRunning) return;
+            const timer = setInterval(() => {
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setIsRunning(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+            setTimeLeft((prev) => {
+                if (prev <= 1) {setIsRunning(false); return 0;}
+                return prev - 1; 
+              });               
+            }, 1000);
+            //jantung waktu: return prev-1, tiap 1000ms
 
-    return () => clearInterval(timer);
+            return () => clearInterval(timer);
   }, [isRunning]);
-
+  //cek: run/ga? (kalo iya lakuin setInterval), selama: isRunning
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -40,6 +40,15 @@ export default function Page() {
     }
   }, [timeLeft])
 
+
+
+
+
+
+
+
+
+  
   return (
     <main className="w-screen h-screen flex flex-col justify-center items-center gap-6">
 

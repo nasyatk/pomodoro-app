@@ -1,26 +1,31 @@
 "use client"
+
+//ts config
 import { COLOR_PROGRESS } from "@/lib/config"
 import React from "react"
 
+//dimensi circle
+const size = 250
+const strokeWidth = 6
+const radius = (size - strokeWidth) / 2
+const circumference = 2 * Math.PI * radius
+
+//style circle
+const bgFill = "none"
+const bgStroke = "#333333"
+const progressFill = "none"
+const progressStroke = "#FF2D55"
+
+//define type
 interface TimerCircleProps {
    progress: number
    children?: React.ReactNode
  }
 
+//component
 function TimerCircle({progress, children}: TimerCircleProps) {
-   //dimensi circle
-  const size = 250
-  const strokeWidth = 12
-  const radius = (size - strokeWidth) / 2
-  const circumference = 2 * Math.PI * radius
 
   const strokeDashoffset = circumference * (1 - progress)
-
-   //style circle
-  const bgFill = "none"
-  const bgStroke = "#333333"
-  const progressFill = "none"
-   const progressStroke = "#FF2D55"
 
   return (
    <div>
@@ -49,13 +54,11 @@ function TimerCircle({progress, children}: TimerCircleProps) {
             strokeLinecap="round"
             transform={`rotate(-90 ${size / 2} ${size / 2})`}
          />
+
       </svg>
 
-         <div className="absolute flex justify-center items-center inset-0
-         outline outline-red-600">
-
-            {children}
-         
+         <div className="absolute flex justify-center items-center inset-0 outline outline-red-600">
+            {children}     
          </div>
 
    </div>
@@ -65,4 +68,5 @@ function TimerCircle({progress, children}: TimerCircleProps) {
 export {TimerCircle}
 
 
-//circle dikasi prop children biar di page lebih simpel
+
+//circle dikasi prop children buat wadah Time 

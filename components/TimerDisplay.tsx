@@ -1,3 +1,4 @@
+//interface for props
 interface TimeProps {
    timeLeft: number;
    className?: string; //Tambahkan prop opsional
@@ -5,6 +6,7 @@ interface TimeProps {
 
 function Time({timeLeft, className=""} : TimeProps){
 
+   //minute & second
    const minutes = Math.floor(timeLeft / 60) .toString().padStart(2, "0")
    const seconds = (timeLeft % 60) .toString().padStart(2, "0")
 
@@ -17,5 +19,11 @@ function Time({timeLeft, className=""} : TimeProps){
 
 export {Time}
 
-//bikin interface
-//tambahkan props className tailwind ke Time
+// bikin type interface - props
+// define time
+// tambahkan props className tailwind ke Time
+
+// math.floor : genapkan angka
+// padStart : angka nol di depan angka
+// toString : ubah angka ke string
+
