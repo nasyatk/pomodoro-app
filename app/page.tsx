@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation"
 //router
 
 import { useState, useEffect } from "react";
-import { Time } from "@/components/TimerDisplay";
 import { Button } from "@/components/ui/button";
 import {TimerCircle} from "@/components/TimerCircle";
 
@@ -11,6 +10,7 @@ import {TimerCircle} from "@/components/TimerCircle";
 const DURATION = 1 * 60;
 
 export default function Page() {
+
   const router = useRouter()
   //router
   const [timeLeft, setTimeLeft] = useState(DURATION);
@@ -18,47 +18,43 @@ export default function Page() {
 
   const progress = timeLeft / DURATION;
 
-  
-  useEffect(() => {
-    if (!isRunning) return;
-            const timer = setInterval(() => {
+    
+    useEffect(() => {
+      if (!isRunning) return;
+              const timer = setInterval(() => {
 
-            setTimeLeft((prev) => {
-                if (prev <= 1) {setIsRunning(false); return 0;}
-                return prev - 1; 
-              });               
-            }, 1000);
-            //jantung waktu: return prev-1, tiap 1000ms
+              setTimeLeft((prev) => {
+                  if (prev <= 1) {setIsRunning(false); return 0;}
+                  return prev - 1; 
+                });               
+              }, 1000);
+              //jantung waktu: return prev-1, tiap 1000ms
 
-            return () => clearInterval(timer);
-  }, [isRunning]);
-  //cek: run/ga? (kalo iya lakuin setInterval), selama: isRunning
+              return () => clearInterval(timer);
+    }, [isRunning]);
+    //cek: run/ga? (kalo iya lakuin setInterval), selama: isRunning
 
-  useEffect(() => {
-    if (timeLeft === 0) {
-      router.push(`/break?duration=${DURATION / 60}`)
-    }
-  }, [timeLeft])
+    useEffect(() => {
+      if (timeLeft === 0) {
+        router.push(`/break?duration=${DURATION / 60}`)
+      }
+    }, [timeLeft])
 
+    //minute & second
+    const minutes = Math.floor(timeLeft / 60)     .toString().padStart(2, "0")
+    const seconds = (timeLeft % 60)               .toString().padStart(2, "0")
 
-
-
-
-
-
-
-
-  
   return (
     <main className="w-screen h-screen flex flex-col justify-center items-center gap-6">
 
-{/* circular progress with timer */}
+      {/* circular progress with timer */}
         <TimerCircle progress={progress}>
-          <Time timeLeft={timeLeft} 
-          className="text-6xl"/>
+          <p className="mb-12 text-6xl">
+            {minutes}:{seconds}
+         </p>
         </TimerCircle>
 
-{/* tombols */}
+      {/* tombols */}
       <div className="flex gap-2 z-10">
         <Button 
           variant="outline" className='w-25'

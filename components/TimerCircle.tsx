@@ -8,7 +8,7 @@ import React from "react"
 const size = 250
 const strokeWidth = 6
 const radius = (size - strokeWidth) / 2
-const circumference = 2 * Math.PI * radius
+const keliling = 2 * Math.PI * radius
 
 //style circle
 const bgFill = "none"
@@ -25,7 +25,7 @@ interface TimerCircleProps {
 //component
 function TimerCircle({progress, children}: TimerCircleProps) {
 
-  const strokeDashoffset = circumference * (1 - progress)
+  const strokeDashoffset = keliling * (1 - progress)
 
   return (
    <div>
@@ -49,7 +49,7 @@ function TimerCircle({progress, children}: TimerCircleProps) {
             fill={progressFill}
             stroke={COLOR_PROGRESS}
             strokeWidth={strokeWidth}
-            strokeDasharray={circumference}
+            strokeDasharray={keliling}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
             transform={`rotate(-90 ${size / 2} ${size / 2})`}

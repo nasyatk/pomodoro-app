@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { TimerCircle } from "@/components/TimerCircle"
-import { Time } from "@/components/TimerDisplay"
 import { Input } from "@/components/ui/input"
 import { InfoIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,13 +14,18 @@ export default function BreakPage() {
    const [timeLeft, setTimeLeft] = useState(DURATION);
    const [isRunning, setIsRunning] = useState(false);
 
+   //minute & second
+   const minutes = Math.floor(timeLeft / 60) .toString().padStart(2, "0")
+   const seconds = (timeLeft % 60) .toString().padStart(2, "0")
+   
    return (
      <main className="w-screen h-screen flex flex-col justify-center items-center gap-6">
 
 {/* Circular progress with timer */}
          <TimerCircle progress={timeLeft / DURATION}>
-            <Time timeLeft={timeLeft}
-            className="text-6xl"/>
+         <p className="mb-12 text-6xl">
+            {minutes}:{seconds}
+         </p>
          </TimerCircle>
          
 {/* Input logbook */}
